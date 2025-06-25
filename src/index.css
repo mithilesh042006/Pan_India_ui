@@ -603,6 +603,77 @@ select:focus {
   background: rgba(0, 0, 0, 0.1);
 }
 
+/* Enhanced tab button styling */
+.tab-button {
+  transition: all 0.2s ease;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.tab-button:hover:before {
+  left: 100%;
+}
+
+.tab-button-active {
+  position: relative;
+}
+
+.tab-button-active:after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+}
+
+/* Tab container styling */
+.tab-container {
+  background: white;
+  border-radius: 16px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+/* Icon container animations */
+.icon-container {
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover .icon-container {
+  transform: scale(1.1);
+}
+
+/* Pulse animation for active indicator */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.active-indicator {
+  animation: pulse 2s infinite;
+}
+
 /* Link styles */
 a {
   color: #2563eb;
