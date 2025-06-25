@@ -39,10 +39,17 @@ const LoginForm = ({ onSubmit, isLoading = false }) => {
         <Input
           label="Email Address"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Enter your email address"
           required
           error={errors.email?.message}
           {...register('email')}
+          style={{
+            borderRadius: '12px',
+            border: '2px solid #e5e7eb',
+            padding: '0.75rem 1rem',
+            fontSize: '1rem',
+            transition: 'all 0.2s ease'
+          }}
         />
       </div>
 
@@ -55,20 +62,32 @@ const LoginForm = ({ onSubmit, isLoading = false }) => {
             required
             error={errors.password?.message}
             {...register('password')}
+            style={{
+              borderRadius: '12px',
+              border: '2px solid #e5e7eb',
+              padding: '0.75rem 1rem',
+              fontSize: '1rem',
+              transition: 'all 0.2s ease',
+              paddingRight: '3rem'
+            }}
           />
           <button
             type="button"
             style={{
               position: 'absolute',
-              right: '0.75rem',
-              top: '2rem',
+              right: '1rem',
+              top: '2.25rem',
               color: '#9ca3af',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              padding: '0.25rem'
+              padding: '0.25rem',
+              borderRadius: '4px',
+              transition: 'color 0.2s ease'
             }}
             onClick={togglePasswordVisibility}
+            onMouseEnter={(e) => e.target.style.color = '#6b7280'}
+            onMouseLeave={(e) => e.target.style.color = '#9ca3af'}
           >
             {showPassword ? <EyeOff style={{ width: '1.25rem', height: '1.25rem' }} /> : <Eye style={{ width: '1.25rem', height: '1.25rem' }} />}
           </button>
@@ -79,7 +98,14 @@ const LoginForm = ({ onSubmit, isLoading = false }) => {
         <div className="text-sm">
           <Link
             to="/forgot-password"
-            style={{ color: '#2563eb', textDecoration: 'none' }}
+            style={{
+              color: '#667eea',
+              textDecoration: 'none',
+              fontWeight: '500',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.color = '#5a67d8'}
+            onMouseLeave={(e) => e.target.style.color = '#667eea'}
           >
             Forgot your password?
           </Link>
@@ -91,8 +117,32 @@ const LoginForm = ({ onSubmit, isLoading = false }) => {
         className="w-full"
         loading={isLoading}
         disabled={isLoading}
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '0.875rem 1.5rem',
+          fontSize: '1rem',
+          fontWeight: '600',
+          color: 'white',
+          cursor: isLoading ? 'not-allowed' : 'pointer',
+          transition: 'all 0.2s ease',
+          boxShadow: '0 4px 14px 0 rgba(102, 126, 234, 0.3)'
+        }}
+        onMouseEnter={(e) => {
+          if (!isLoading) {
+            e.target.style.transform = 'translateY(-1px)';
+            e.target.style.boxShadow = '0 6px 20px 0 rgba(102, 126, 234, 0.4)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isLoading) {
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = '0 4px 14px 0 rgba(102, 126, 234, 0.3)';
+          }
+        }}
       >
-        Sign In
+        {isLoading ? 'Signing In...' : 'Sign In'}
       </Button>
 
       <div className="text-center">
@@ -100,9 +150,16 @@ const LoginForm = ({ onSubmit, isLoading = false }) => {
           Don't have an account?{' '}
           <Link
             to="/register"
-            style={{ color: '#2563eb', textDecoration: 'none', fontWeight: '500' }}
+            style={{
+              color: '#667eea',
+              textDecoration: 'none',
+              fontWeight: '600',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.color = '#5a67d8'}
+            onMouseLeave={(e) => e.target.style.color = '#667eea'}
           >
-            Sign up
+            Create account
           </Link>
         </span>
       </div>

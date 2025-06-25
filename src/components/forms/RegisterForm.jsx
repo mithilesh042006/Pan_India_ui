@@ -77,6 +77,23 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
     onSubmit(formattedData);
   };
 
+  const inputStyle = {
+    borderRadius: '12px',
+    border: '2px solid #e5e7eb',
+    padding: '0.75rem 1rem',
+    fontSize: '1rem',
+    transition: 'all 0.2s ease'
+  };
+
+  const selectStyle = {
+    borderRadius: '12px',
+    border: '2px solid #e5e7eb',
+    padding: '0.75rem 1rem',
+    fontSize: '1rem',
+    transition: 'all 0.2s ease',
+    background: 'white'
+  };
+
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,15 +103,17 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
           required
           error={errors.full_name?.message}
           {...register('full_name')}
+          style={inputStyle}
         />
 
         <Input
           label="Email Address"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Enter your email address"
           required
           error={errors.email?.message}
           {...register('email')}
+          style={inputStyle}
         />
       </div>
 
@@ -103,17 +122,31 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
           <Input
             label="Password"
             type={showPassword ? 'text' : 'password'}
-            placeholder="Enter your password"
+            placeholder="Create a strong password"
             required
             error={errors.password?.message}
             {...register('password')}
+            style={{...inputStyle, paddingRight: '3rem'}}
           />
           <button
             type="button"
-            className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+            style={{
+              position: 'absolute',
+              right: '1rem',
+              top: '2.25rem',
+              color: '#9ca3af',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0.25rem',
+              borderRadius: '4px',
+              transition: 'color 0.2s ease'
+            }}
             onClick={togglePasswordVisibility}
+            onMouseEnter={(e) => e.target.style.color = '#6b7280'}
+            onMouseLeave={(e) => e.target.style.color = '#9ca3af'}
           >
-            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            {showPassword ? <EyeOff style={{ width: '1.25rem', height: '1.25rem' }} /> : <Eye style={{ width: '1.25rem', height: '1.25rem' }} />}
           </button>
         </div>
 
@@ -125,32 +158,47 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
             required
             error={errors.password_confirm?.message}
             {...register('password_confirm')}
+            style={{...inputStyle, paddingRight: '3rem'}}
           />
           <button
             type="button"
-            className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+            style={{
+              position: 'absolute',
+              right: '1rem',
+              top: '2.25rem',
+              color: '#9ca3af',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0.25rem',
+              borderRadius: '4px',
+              transition: 'color 0.2s ease'
+            }}
             onClick={toggleConfirmPasswordVisibility}
+            onMouseEnter={(e) => e.target.style.color = '#6b7280'}
+            onMouseLeave={(e) => e.target.style.color = '#9ca3af'}
           >
-            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            {showConfirmPassword ? <EyeOff style={{ width: '1.25rem', height: '1.25rem' }} /> : <Eye style={{ width: '1.25rem', height: '1.25rem' }} />}
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            User Role <span className="text-red-500">*</span>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            User Role <span className="text-red-600">*</span>
           </label>
           <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            style={selectStyle}
+            className="w-full"
             {...register('user_role')}
           >
             <option value="">Select your role</option>
-            <option value="employee">Employee</option>
-            <option value="employer">Employer</option>
+            <option value="employee">Employee - Rate Companies</option>
+            <option value="employer">Employer - Rate Employees</option>
           </select>
           {errors.user_role && (
-            <p className="mt-1 text-sm text-red-600">{errors.user_role.message}</p>
+            <p className="mt-2 text-sm text-red-600">{errors.user_role.message}</p>
           )}
         </div>
 
@@ -160,6 +208,7 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
           required
           error={errors.city?.message}
           {...register('city')}
+          style={inputStyle}
         />
       </div>
 
@@ -169,6 +218,7 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
         required
         error={errors.skills?.message}
         {...register('skills')}
+        style={inputStyle}
       />
 
       <Input
@@ -176,6 +226,7 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
         placeholder="https://linkedin.com/in/yourprofile"
         error={errors.linkedin_url?.message}
         {...register('linkedin_url')}
+        style={inputStyle}
       />
 
       <Button
@@ -183,8 +234,32 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
         className="w-full"
         loading={isLoading}
         disabled={isLoading}
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '0.875rem 1.5rem',
+          fontSize: '1rem',
+          fontWeight: '600',
+          color: 'white',
+          cursor: isLoading ? 'not-allowed' : 'pointer',
+          transition: 'all 0.2s ease',
+          boxShadow: '0 4px 14px 0 rgba(102, 126, 234, 0.3)'
+        }}
+        onMouseEnter={(e) => {
+          if (!isLoading) {
+            e.target.style.transform = 'translateY(-1px)';
+            e.target.style.boxShadow = '0 6px 20px 0 rgba(102, 126, 234, 0.4)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isLoading) {
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = '0 4px 14px 0 rgba(102, 126, 234, 0.3)';
+          }
+        }}
       >
-        Create Account
+        {isLoading ? 'Creating Account...' : 'Create Account'}
       </Button>
 
       <div className="text-center">
@@ -192,7 +267,14 @@ const RegisterForm = ({ onSubmit, isLoading = false }) => {
           Already have an account?{' '}
           <Link
             to="/login"
-            className="text-blue-600 hover:text-blue-500 font-medium"
+            style={{
+              color: '#667eea',
+              textDecoration: 'none',
+              fontWeight: '600',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.color = '#5a67d8'}
+            onMouseLeave={(e) => e.target.style.color = '#667eea'}
           >
             Sign in
           </Link>

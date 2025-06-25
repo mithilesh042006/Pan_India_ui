@@ -6,7 +6,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Badge from '../components/ui/Badge';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { Search, MapPin, Star, Users, Filter, User } from 'lucide-react';
+import { Search, MapPin, Star, Users, Filter, User, TrendingUp, Award, Eye, ArrowUpRight, UserCheck } from 'lucide-react';
 import { formatNumber, getRatingColor, getInitials, getAvatarColor } from '../utils/helpers';
 import { CITIES, COMMON_SKILLS } from '../utils/constants';
 
@@ -83,17 +83,67 @@ const EmployeesPage = () => {
   const hasNext = employeesData?.has_next || false;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Employees</h1>
-        <p className="mt-2 text-gray-600">
-          Discover and rate talented employees across India
-        </p>
-      </div>
+    <div style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', minHeight: '100vh' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div style={{
+            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            borderRadius: '20px',
+            padding: '2rem',
+            color: 'white',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: '-30px',
+              right: '-30px',
+              width: '150px',
+              height: '150px',
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '50%'
+            }}></div>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold mb-2">
+                    👥 Talent Directory
+                  </h1>
+                  <p className="text-lg opacity-90">
+                    Discover and rate talented employees across India
+                  </p>
+                  <div className="mt-4 flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <TrendingUp style={{ width: '1.25rem', height: '1.25rem' }} />
+                      <span className="text-sm">Growing Talent Pool</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Award style={{ width: '1.25rem', height: '1.25rem' }} />
+                      <span className="text-sm">Verified Professionals</span>
+                    </div>
+                  </div>
+                </div>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '16px',
+                  padding: '1rem',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <UserCheck style={{ width: '3rem', height: '3rem' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       {/* Search and Filters */}
-      <Card className="mb-8">
+      <Card style={{
+        background: 'white',
+        borderRadius: '16px',
+        border: '1px solid #e5e7eb',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+      }} className="mb-8">
         <Card.Body>
           <div className="space-y-4">
             {/* Search Bar */}
@@ -193,7 +243,24 @@ const EmployeesPage = () => {
       {employees.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {employees.map((employee) => (
-            <Card key={employee.id} hover className="h-full">
+            <Card key={employee.id}
+              style={{
+                background: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e5e7eb',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.3s ease',
+                transform: 'translateY(0)'
+              }}
+              className="h-full hover-lift"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+              }}>
               <Card.Body>
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
@@ -272,17 +339,49 @@ const EmployeesPage = () => {
                 <div className="mt-4 pt-4 border-t border-gray-200 flex space-x-2">
                   <Button
                     size="small"
+                    style={{
+                      background: employee.user_has_rated
+                        ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                        : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      border: 'none',
+                      color: 'white',
+                      borderRadius: '8px',
+                      transition: 'all 0.2s ease'
+                    }}
                     className="flex-1"
                     disabled={!employee.can_rate}
                   >
-                    {employee.user_has_rated ? 'Rated' : 'Rate Employee'}
+                    {employee.user_has_rated ? (
+                      <div className="flex items-center justify-center">
+                        <Award style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
+                        Rated
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center">
+                        <Star style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
+                        Rate Employee
+                      </div>
+                    )}
                   </Button>
                   <Button
                     variant="outline"
                     size="small"
+                    style={{
+                      borderColor: '#d1d5db',
+                      borderRadius: '8px',
+                      transition: 'all 0.2s ease'
+                    }}
                     className="flex items-center"
+                    onMouseEnter={(e) => {
+                      e.target.style.borderColor = '#10b981';
+                      e.target.style.color = '#10b981';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.borderColor = '#d1d5db';
+                      e.target.style.color = '#374151';
+                    }}
                   >
-                    <User className="w-4 h-4 mr-1" />
+                    <Eye style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
                     View
                   </Button>
                 </div>
@@ -330,6 +429,7 @@ const EmployeesPage = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
