@@ -137,82 +137,251 @@ const CompaniesPage = () => {
 
       {/* Search and Filters */}
       <Card style={{
-        background: 'white',
-        borderRadius: '16px',
+        background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+        borderRadius: '20px',
         border: '1px solid #e5e7eb',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden'
       }} className="mb-8">
-        <Card.Body>
-          <div className="space-y-4">
-            {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <Card.Body style={{ padding: '2rem' }}>
+          <div className="space-y-6">
+            {/* Search Header */}
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">🔍 Find Companies</h3>
+              <p className="text-gray-600">Search and filter companies to find the perfect match</p>
+            </div>
+
+            {/* Enhanced Search Bar */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                position: 'absolute',
+                left: '1rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                borderRadius: '8px',
+                padding: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <Search style={{ width: '1.25rem', height: '1.25rem', color: 'white' }} />
+              </div>
               <Input
-                placeholder="Search companies by name or city..."
+                placeholder="Search companies by name, city, or industry..."
                 value={searchParams.search}
                 onChange={handleSearchChange}
-                className="pl-10"
+                style={{
+                  paddingLeft: '4rem',
+                  paddingRight: '1rem',
+                  paddingTop: '1rem',
+                  paddingBottom: '1rem',
+                  fontSize: '1rem',
+                  borderRadius: '16px',
+                  border: '2px solid #e5e7eb',
+                  background: 'white',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#667eea';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+                }}
               />
             </div>
 
-            {/* Filter Toggle */}
-            <div className="flex justify-between items-center">
+            {/* Enhanced Filter Toggle */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
+              borderRadius: '12px',
+              padding: '1rem',
+              border: '1px solid #e5e7eb'
+            }}>
               <Button
                 variant="outline"
                 size="small"
                 onClick={() => setShowFilters(!showFilters)}
+                style={{
+                  background: showFilters
+                    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    : 'white',
+                  color: showFilters ? 'white' : '#374151',
+                  border: showFilters ? 'none' : '2px solid #e5e7eb',
+                  borderRadius: '10px',
+                  padding: '0.5rem 1rem',
+                  transition: 'all 0.2s ease',
+                  fontWeight: '500'
+                }}
                 className="flex items-center"
+                onMouseEnter={(e) => {
+                  if (!showFilters) {
+                    e.target.style.borderColor = '#667eea';
+                    e.target.style.color = '#667eea';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!showFilters) {
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.color = '#374151';
+                  }
+                }}
               >
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
+                <Filter style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+                {showFilters ? 'Hide Filters' : 'Show Filters'}
               </Button>
 
-              {(searchParams.city || searchParams.min_rating) && (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  onClick={clearFilters}
-                >
-                  Clear Filters
-                </Button>
-              )}
+              <div className="flex items-center space-x-3">
+                <div className="text-sm text-gray-600">
+                  {companies.length} companies found
+                </div>
+                {(searchParams.city || searchParams.min_rating) && (
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={clearFilters}
+                    style={{
+                      background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '0.5rem 0.75rem',
+                      fontSize: '0.75rem',
+                      fontWeight: '500',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = 'scale(1.05)';
+                      e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = 'scale(1)';
+                      e.target.style.boxShadow = 'none';
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                )}
+              </div>
             </div>
 
-            {/* Filters */}
+            {/* Enhanced Filters */}
             {showFilters && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City
-                  </label>
-                  <select
-                    value={searchParams.city}
-                    onChange={(e) => handleFilterChange('city', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">All Cities</option>
-                    {CITIES.map(city => (
-                      <option key={city} value={city}>{city}</option>
-                    ))}
-                  </select>
+              <div style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                border: '2px solid #e5e7eb',
+                marginTop: '1rem',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+                animation: 'slideDown 0.3s ease-out'
+              }}>
+                <div className="flex items-center mb-4">
+                  <div style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    borderRadius: '8px',
+                    padding: '0.5rem',
+                    marginRight: '0.75rem'
+                  }}>
+                    <Filter style={{ width: '1.25rem', height: '1.25rem', color: 'white' }} />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900">Advanced Filters</h4>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Minimum Rating
-                  </label>
-                  <select
-                    value={searchParams.min_rating}
-                    onChange={(e) => handleFilterChange('min_rating', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Any Rating</option>
-                    <option value="4">4+ Stars</option>
-                    <option value="3">3+ Stars</option>
-                    <option value="2">2+ Stars</option>
-                    <option value="1">1+ Stars</option>
-                  </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                      <MapPin style={{ width: '1rem', height: '1rem', marginRight: '0.5rem', color: '#10b981' }} />
+                      City Location
+                    </label>
+                    <select
+                      value={searchParams.city}
+                      onChange={(e) => handleFilterChange('city', e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem 1rem',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        fontSize: '0.875rem',
+                        background: 'white',
+                        transition: 'all 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#10b981';
+                        e.target.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e5e7eb';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    >
+                      <option value="">🌍 All Cities</option>
+                      {CITIES.map(city => (
+                        <option key={city} value={city}>📍 {city}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                      <Star style={{ width: '1rem', height: '1rem', marginRight: '0.5rem', color: '#f59e0b' }} />
+                      Minimum Rating
+                    </label>
+                    <select
+                      value={searchParams.min_rating}
+                      onChange={(e) => handleFilterChange('min_rating', e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem 1rem',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        fontSize: '0.875rem',
+                        background: 'white',
+                        transition: 'all 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#f59e0b';
+                        e.target.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.1)';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e5e7eb';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    >
+                      <option value="">⭐ Any Rating</option>
+                      <option value="4">⭐⭐⭐⭐ 4+ Stars</option>
+                      <option value="3">⭐⭐⭐ 3+ Stars</option>
+                      <option value="2">⭐⭐ 2+ Stars</option>
+                      <option value="1">⭐ 1+ Stars</option>
+                    </select>
+                  </div>
                 </div>
+
+                {/* Filter Summary */}
+                {(searchParams.city || searchParams.min_rating) && (
+                  <div style={{
+                    marginTop: '1rem',
+                    padding: '0.75rem',
+                    background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                    borderRadius: '8px',
+                    border: '1px solid #bfdbfe'
+                  }}>
+                    <div className="text-sm text-gray-700">
+                      <strong>Active Filters:</strong>
+                      {searchParams.city && <span className="ml-2 text-blue-600">📍 {searchParams.city}</span>}
+                      {searchParams.min_rating && <span className="ml-2 text-yellow-600">⭐ {searchParams.min_rating}+ Stars</span>}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

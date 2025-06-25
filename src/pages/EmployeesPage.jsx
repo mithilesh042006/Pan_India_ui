@@ -139,21 +139,61 @@ const EmployeesPage = () => {
 
       {/* Search and Filters */}
       <Card style={{
-        background: 'white',
-        borderRadius: '16px',
+        background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)',
+        borderRadius: '20px',
         border: '1px solid #e5e7eb',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden'
       }} className="mb-8">
-        <Card.Body>
-          <div className="space-y-4">
-            {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <Card.Body style={{ padding: '2rem' }}>
+          <div className="space-y-6">
+            {/* Search Header */}
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">👥 Find Talent</h3>
+              <p className="text-gray-600">Search and filter employees to discover skilled professionals</p>
+            </div>
+
+            {/* Enhanced Search Bar */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                position: 'absolute',
+                left: '1rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                borderRadius: '8px',
+                padding: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <Search style={{ width: '1.25rem', height: '1.25rem', color: 'white' }} />
+              </div>
               <Input
-                placeholder="Search employees by name, skills, or city..."
+                placeholder="Search employees by name, skills, city, or expertise..."
                 value={searchParams.search}
                 onChange={handleSearchChange}
-                className="pl-10"
+                style={{
+                  paddingLeft: '4rem',
+                  paddingRight: '1rem',
+                  paddingTop: '1rem',
+                  paddingBottom: '1rem',
+                  fontSize: '1rem',
+                  borderRadius: '16px',
+                  border: '2px solid #e5e7eb',
+                  background: 'white',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#10b981';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+                }}
               />
             </div>
 
