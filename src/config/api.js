@@ -22,6 +22,7 @@ export const API_CONFIG = {
     RATING_CATEGORIES: '/api/core/rating-categories/',
     CHECK_RATING_ELIGIBILITY: '/api/core/check-rating-eligibility/',
     USER_STATS: '/api/core/users/{user_id}/stats/',
+    USER_PROFILE: '/api/core/users/{user_id}/profile/',
     DASHBOARD: '/api/core/dashboard/',
     MY_RATINGS_GIVEN: '/api/core/my-ratings/given/',
     MY_RATINGS_RECEIVED: '/api/core/my-ratings/received/',

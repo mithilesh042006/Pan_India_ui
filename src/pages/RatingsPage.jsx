@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../context/AuthContext';
 import ratingService from '../services/ratingService';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { Star, Send, Inbox, Calendar, User, Eye, EyeOff } from 'lucide-react';
+import { Star, Send, Inbox, Calendar, EyeOff } from 'lucide-react';
 import { formatDate, getRatingColor, getInitials, getAvatarColor } from '../utils/helpers';
 
 const RatingsPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('received'); // 'received' or 'given'
 
   // Get ratings received
@@ -33,6 +37,18 @@ const RatingsPage = () => {
     if (!categoryScores || categoryScores.length === 0) return 0;
     const total = categoryScores.reduce((sum, item) => sum + item.score, 0);
     return (total / categoryScores.length).toFixed(1);
+  };
+
+  const handleStartRating = () => {
+    // Navigate based on user role
+    if (user?.user_role === 'employee') {
+      navigate('/companies');
+    } else if (user?.user_role === 'employer') {
+      navigate('/employees');
+    } else {
+      // Fallback to dashboard if role is unclear
+      navigate('/dashboard');
+    }
   };
 
   const RatingCard = ({ rating }) => {
@@ -355,10 +371,34 @@ const RatingsPage = () => {
                   <Send className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No ratings given yet</h3>
                   <p className="text-gray-500 mb-4">
-                    Start rating companies or employees to build your review history
+                    Start rating {user?.user_role === 'employee' ? 'companies' : user?.user_role === 'employer' ? 'employees' : 'others'} to build your review history
                   </p>
-                  <Button>
-                    Start Rating
+                  <Button
+                    onClick={handleStartRating}
+                    style={{
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      border: 'none',
+                      color: 'white',
+                      borderRadius: '12px',
+                      padding: '0.75rem 2rem',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      transition: 'all 0.2s ease',
+                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                    }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Star style={{ width: '1.25rem', height: '1.25rem' }} />
+                      <span>Start Rating {user?.user_role === 'employee' ? 'Companies' : user?.user_role === 'employer' ? 'Employees' : 'Now'}</span>
+                    </div>
                   </Button>
                 </>
               )}

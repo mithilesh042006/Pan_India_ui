@@ -4,8 +4,24 @@ import { API_CONFIG } from '../config/api';
 class RatingService {
   // Create a new rating
   async createRating(ratingData) {
-    const response = await apiHelpers.post(API_CONFIG.ENDPOINTS.RATINGS, ratingData);
-    return response.data;
+    // Validate required fields
+    if (!ratingData.ratee || !ratingData.role_context || !ratingData.category_scores || ratingData.category_scores.length === 0) {
+      throw new Error('Missing required rating data');
+    }
+
+    // Validate category scores
+    const invalidScores = ratingData.category_scores.filter(cs => !cs.score || cs.score < 1 || cs.score > 5);
+    if (invalidScores.length > 0) {
+      throw new Error('All category scores must be between 1 and 5');
+    }
+
+    try {
+      const response = await apiHelpers.post(API_CONFIG.ENDPOINTS.RATINGS, ratingData);
+      return response.data;
+    } catch (error) {
+      console.error('Rating creation failed:', error);
+      throw error;
+    }
   }
 
   // Get rating categories
@@ -18,7 +34,7 @@ class RatingService {
   // Check rating eligibility
   async checkRatingEligibility(rateeId, roleContext) {
     const response = await apiHelpers.post(API_CONFIG.ENDPOINTS.CHECK_RATING_ELIGIBILITY, {
-      ratee_id: rateeId,
+      ratee_id: parseInt(rateeId),
       role_context: roleContext,
     });
     return response.data;
@@ -41,6 +57,13 @@ class RatingService {
       page,
       page_size,
     });
+    return response.data;
+  }
+
+  // Get complete user profile with ratings
+  async getUserProfile(userId) {
+    const url = API_CONFIG.ENDPOINTS.USER_PROFILE.replace('{user_id}', userId);
+    const response = await apiHelpers.get(url);
     return response.data;
   }
 

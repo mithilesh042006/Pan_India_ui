@@ -21,6 +21,13 @@ class UserService {
     return response.data;
   }
 
+  // Get complete user profile with ratings
+  async getUserProfile(userId) {
+    const url = API_CONFIG.ENDPOINTS.USER_PROFILE.replace('{user_id}', userId);
+    const response = await apiHelpers.get(url);
+    return response.data;
+  }
+
   // Get dashboard data
   async getDashboard() {
     const response = await apiHelpers.get(API_CONFIG.ENDPOINTS.DASHBOARD);

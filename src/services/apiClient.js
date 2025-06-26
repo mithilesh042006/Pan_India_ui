@@ -94,6 +94,10 @@ apiClient.interceptors.response.use(
             });
           } else if (data.error) {
             toast.error(data.error);
+          } else if (data.message) {
+            toast.error(data.message);
+          } else {
+            toast.error('Invalid request data. Please check your input and try again.');
           }
           break;
           
