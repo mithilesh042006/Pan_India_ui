@@ -28,7 +28,8 @@
       "duration": "2020-2023"
     }
   ],
-  "linkedin_url": "https://linkedin.com/in/johndoe"
+  "linkedin_url": "https://linkedin.com/in/johndoe",
+  "show_rating_details": true
 }
 ```
 
@@ -366,6 +367,7 @@ avatar: [image file]
   "ratee": 2,
   "role_context": "EMPLOYEE_TO_COMPANY",
   "is_anonymous": true,
+  "feedback_message": "Great company to work for! Excellent work-life balance and supportive management. The career growth opportunities are outstanding and the compensation is competitive. Highly recommend to other professionals.",
   "category_scores": [
     {"category": "Work Environment", "score": 5},
     {"category": "Management Quality", "score": 4},
@@ -387,6 +389,7 @@ avatar: [image file]
   "ratee_name": "TechCorp Solutions",
   "role_context": "EMPLOYEE_TO_COMPANY",
   "is_anonymous": true,
+  "feedback_message": null,
   "created_at": "2024-01-20T14:30:00Z",
   "category_scores": [
     {"category": "Work Environment", "score": 5},
@@ -459,7 +462,7 @@ avatar: [image file]
 ```
 
 ### 16. User Rating Statistics
-**GET** `/api/core/users/{user_id}/stats/`  
+**GET** `/api/core/users/{user_id}/stats/`
 **Authentication:** Required
 
 **Success Response (200):**
@@ -493,7 +496,91 @@ avatar: [image file]
 }
 ```
 
-### 17. Dashboard Statistics
+### 17. Complete User Profile with Ratings
+**GET** `/api/core/users/{user_id}/profile/`
+**Authentication:** Required
+
+**Description:** Get complete user profile with detailed ratings, feedback messages, and ability to rate.
+
+**Success Response (200):**
+```json
+{
+  "user_profile": {
+    "id": 2,
+    "email": "techcorp@example.com",
+    "full_name": "TechCorp Solutions",
+    "avatar": "/media/avatars/techcorp_logo.jpg",
+    "city": "Mumbai",
+    "skills": [],
+    "work_history": [],
+    "linkedin_url": "https://linkedin.com/company/techcorp",
+    "rating_received": 4.5,
+    "show_rating_details": true,
+    "user_role": "employer",
+    "date_joined": "2023-06-15T08:30:00Z",
+    "is_active": true
+  },
+  "rating_summary": {
+    "average_rating": 4.5,
+    "total_ratings": 25,
+    "ratings_by_category": {
+      "Work Environment": {"average": 4.6, "count": 25},
+      "Management Quality": {"average": 4.3, "count": 25},
+      "Career Growth": {"average": 4.2, "count": 25},
+      "Work-Life Balance": {"average": 4.7, "count": 25},
+      "Compensation": {"average": 4.4, "count": 25},
+      "Company Culture": {"average": 4.5, "count": 25}
+    }
+  },
+  "all_ratings": [
+    {
+      "id": 15,
+      "rater": 1,
+      "rater_name": "John Doe",
+      "ratee": 2,
+      "ratee_name": "TechCorp Solutions",
+      "role_context": "EMPLOYEE_TO_COMPANY",
+      "is_anonymous": false,
+      "feedback_message": "Excellent company to work for! Great work-life balance and supportive management. The career growth opportunities are outstanding and the compensation is competitive. Highly recommend to other professionals.",
+      "created_at": "2024-01-20T14:30:00Z",
+      "category_scores": [
+        {"category": "Work Environment", "score": 5},
+        {"category": "Management Quality", "score": 4},
+        {"category": "Career Growth", "score": 4},
+        {"category": "Work-Life Balance", "score": 5},
+        {"category": "Compensation", "score": 4},
+        {"category": "Company Culture", "score": 5}
+      ]
+    },
+    {
+      "id": 16,
+      "rater": 3,
+      "rater_name": "Anonymous",
+      "ratee": 2,
+      "ratee_name": "TechCorp Solutions",
+      "role_context": "EMPLOYEE_TO_COMPANY",
+      "is_anonymous": true,
+      "feedback_message": null,
+      "created_at": "2024-01-19T10:15:00Z",
+      "category_scores": [
+        {"category": "Work Environment", "score": 4},
+        {"category": "Management Quality", "score": 3}
+      ]
+    }
+  ],
+  "can_rate": true,
+  "rating_context": "EMPLOYEE_TO_COMPANY"
+}
+```
+
+**Note:**
+- `feedback_message` is visible based on anonymity settings and user permissions
+- `can_rate` indicates if the current user can rate this profile
+- `rating_context` shows the type of rating that can be given
+- `rating_details_visible` indicates if the user allows their rating details to be shown
+- If `show_rating_details` is false, `all_ratings` will be empty for other users
+
+### 18. Dashboard Statistics
 **GET** `/api/core/dashboard/`  
 **Authentication:** Required
 
@@ -524,7 +611,7 @@ avatar: [image file]
 }
 ```
 
-### 18. My Ratings Given
+### 19. My Ratings Given
 **GET** `/api/core/my-ratings/given/`  
 **Authentication:** Required
 
@@ -554,7 +641,7 @@ avatar: [image file]
 }
 ```
 
-### 19. My Ratings Received
+### 20. My Ratings Received
 **GET** `/api/core/my-ratings/received/`  
 **Authentication:** Required
 
@@ -582,7 +669,7 @@ avatar: [image file]
 
 ## 🔧 Utility Endpoints
 
-### 20. Health Check
+### 21. Health Check
 **GET** `/api/core/health/`  
 **Authentication:** Not required
 
@@ -595,7 +682,7 @@ avatar: [image file]
 }
 ```
 
-### 21. User Statistics
+### 22. User Statistics
 **GET** `/api/auth/statistics/`  
 **Authentication:** Required
 
@@ -694,18 +781,79 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
    - `employee` - Individual job seekers/workers
    - `employer` - Companies/organizations
 
-3. **Rating Scores:** 
+3. **Rating Scores:**
    - Range: 1-5 (integers only)
    - 1 = Poor, 2 = Fair, 3 = Good, 4 = Very Good, 5 = Excellent
 
-4. **File Upload:**
+4. **Feedback Messages:**
+   - Optional text feedback with ratings (max 1000 characters)
+   - Visible to ratee (person being rated) always
+   - Visible to others only if rating is not anonymous
+   - Can be left blank for score-only ratings
+
+5. **File Upload:**
    - Avatar images: JPEG, PNG, GIF
    - Maximum size: 5MB
    - Automatically resized if needed
 
-5. **Pagination:**
+6. **Pagination:**
    - Default page size: 20
    - Maximum page size: 100
    - Pages are 1-indexed
+
+## 💬 **Feedback Message Examples**
+
+### Employee Rating Company:
+```json
+{
+  "feedback_message": "Excellent company culture and great work-life balance. Management is very supportive and provides clear career growth paths. The compensation package is competitive and the work environment is collaborative. Would definitely recommend to other professionals looking for a stable and growth-oriented workplace."
+}
+```
+
+### Employer Rating Employee:
+```json
+{
+  "feedback_message": "Outstanding technical skills and excellent communication. Always delivers projects on time and shows great initiative in problem-solving. Works well with the team and demonstrates strong leadership qualities. A valuable asset to any organization."
+}
+```
+
+### Anonymous Rating (Feedback Hidden from Public):
+```json
+{
+  "is_anonymous": true,
+  "feedback_message": "This feedback will only be visible to the person being rated, not to other users browsing the platform."
+}
+```
+
+## 🔒 **Privacy and Security Features**
+
+### Rating Details Privacy Control
+- Users can control whether their rating details are visible to others using the `show_rating_details` field
+- When `show_rating_details` is `false`:
+  - Other users see 0 total ratings in lists
+  - Other users see empty detailed ratings array
+  - Category averages are hidden
+  - Only the overall rating average remains visible
+- When `show_rating_details` is `true` (default):
+  - All rating details are visible to other users
+  - Full transparency mode
+- Users can always see their own ratings regardless of privacy setting
+- Privacy setting can be updated through profile management
+
+### Anonymous Ratings
+- Users can choose to rate anonymously
+- Anonymous ratings hide the rater's identity
+- Feedback from anonymous ratings is only visible to the person being rated
+
+### Feedback Privacy
+- Public ratings: Feedback visible to everyone
+- Anonymous ratings: Feedback only visible to the ratee
+- Ratee always sees all feedback regardless of anonymity
+
+### Data Protection
+- All endpoints require authentication
+- Users can only rate others in appropriate contexts (employee→company, employer→employee)
+- Duplicate ratings are prevented
+- Input validation and sanitization applied
 
 This documentation covers all available endpoints with complete request/response examples for the Pan-India Employee & Employer Rating Portal API.

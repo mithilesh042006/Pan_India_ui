@@ -65,14 +65,14 @@ export const calculateAverageRating = (ratings, scoreField = 'score') => {
 /**
  * Get rating color based on score
  * @param {number} rating - Rating score (1-5)
- * @returns {string} Tailwind color class
+ * @returns {string} CSS color value
  */
 export const getRatingColor = (rating) => {
-  if (rating >= 4.5) return 'text-green-600';
-  if (rating >= 3.5) return 'text-blue-600';
-  if (rating >= 2.5) return 'text-yellow-600';
-  if (rating >= 1.5) return 'text-orange-600';
-  return 'text-red-600';
+  if (rating >= 4.5) return '#059669'; // green-600
+  if (rating >= 3.5) return '#2563eb'; // blue-600
+  if (rating >= 2.5) return '#d97706'; // yellow-600
+  if (rating >= 1.5) return '#ea580c'; // orange-600
+  return '#dc2626'; // red-600
 };
 
 /**
@@ -154,25 +154,27 @@ export const isValidEmail = (email) => {
 /**
  * Generate random color for avatar
  * @param {string} seed - Seed for consistent color generation
- * @returns {string} Tailwind background color class
+ * @returns {string} CSS color value
  */
 export const getAvatarColor = (seed) => {
   const colors = [
-    'bg-red-500',
-    'bg-blue-500',
-    'bg-green-500',
-    'bg-yellow-500',
-    'bg-purple-500',
-    'bg-pink-500',
-    'bg-indigo-500',
-    'bg-teal-500',
+    'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', // red
+    'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', // blue
+    'linear-gradient(135deg, #10b981 0%, #059669 100%)', // green
+    'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', // yellow
+    'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', // purple
+    'linear-gradient(135deg, #ec4899 0%, #db2777 100%)', // pink
+    'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', // indigo
+    'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', // teal
   ];
-  
+
+  if (!seed) return colors[0];
+
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
     hash = seed.charCodeAt(i) + ((hash << 5) - hash);
   }
-  
+
   return colors[Math.abs(hash) % colors.length];
 };
 

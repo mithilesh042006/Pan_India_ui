@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import userService from '../services/userService';
 import Card from '../components/ui/Card';
@@ -11,6 +12,7 @@ import { formatNumber, getRatingColor, getInitials, getAvatarColor } from '../ut
 import { CITIES } from '../utils/constants';
 
 const CompaniesPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useState({
     search: '',
     city: '',
@@ -487,6 +489,7 @@ const CompaniesPage = () => {
                     }}
                     className="flex-1"
                     disabled={!company.can_rate}
+                    onClick={() => company.can_rate && navigate(`/rate/${company.id}`)}
                   >
                     {company.user_has_rated ? (
                       <div className="flex items-center justify-center">
@@ -509,6 +512,7 @@ const CompaniesPage = () => {
                       transition: 'all 0.2s ease'
                     }}
                     className="flex items-center"
+                    onClick={() => navigate(`/user/${company.id}`)}
                     onMouseEnter={(e) => {
                       e.target.style.borderColor = '#667eea';
                       e.target.style.color = '#667eea';

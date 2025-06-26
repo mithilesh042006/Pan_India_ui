@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { DataProvider } from './contexts/DataContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import PublicRoute from './components/auth/PublicRoute';
 import Header from './components/common/Header';
@@ -15,6 +16,8 @@ import ProfilePage from './pages/ProfilePage';
 import CompaniesPage from './pages/CompaniesPage';
 import EmployeesPage from './pages/EmployeesPage';
 import RatingsPage from './pages/RatingsPage';
+import UserProfilePage from './pages/UserProfilePage';
+import RateUserPage from './pages/RateUserPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Create a client
@@ -31,7 +34,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router>
+        <DataProvider>
+          <Router>
           <div className="min-h-screen bg-gray-50">
             <Toaster
               position="top-right"
@@ -84,6 +88,8 @@ function App() {
                           <Route path="/companies" element={<CompaniesPage />} />
                           <Route path="/employees" element={<EmployeesPage />} />
                           <Route path="/ratings" element={<RatingsPage />} />
+                          <Route path="/user/:id" element={<UserProfilePage />} />
+                          <Route path="/rate/:id" element={<RateUserPage />} />
                           <Route path="/" element={<Navigate to="/dashboard" replace />} />
                           <Route path="*" element={<NotFoundPage />} />
                         </Routes>
@@ -94,7 +100,8 @@ function App() {
               />
             </Routes>
           </div>
-        </Router>
+          </Router>
+        </DataProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
